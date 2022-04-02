@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const CryptoJs = require("crypto-js");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 
@@ -27,7 +28,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
- 
+
     // checking if not user
     // use of && is similar to use of if condition
     !user && res.status(401).json("Wrong username or password");
@@ -42,10 +43,19 @@ router.post("/login", async (req, res) => {
     originalPassword != req.body.password &&
       res.status(401).json("Wrong username or password");
 
+    // accessing jwt token
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+        isAdmin: user.isAdmin,
+      },
+      process.env.JWT_SEC,
+      { expiresIn: "3600s" }
+    );
     // destructuring password and other information of user
     // and sending only other information, and not password
     const { password, ...otherInfo } = user._doc;
-    res.status(200).json(otherInfo);
+    res.status(200).json({...otherInfo, accessToken}); //jwt token is also passed
   } catch (error) {
     res.status(500).json(error);
   }
