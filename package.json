@@ -1,0 +1,27 @@
+{
+  "name": "-ms_e-commerce_aquila_tep_online_full-time_2022_2",
+  "version": "1.0.0",
+  "description": "At the end of this milestone you will learn",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/exponentsoftware/-MS_E-commerce_Aquila_Tep_Online_Full-time_2022_2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/exponentsoftware/-MS_E-commerce_Aquila_Tep_Online_Full-time_2022_2/issues"
+  },
+  "homepage": "https://github.com/exponentsoftware/-MS_E-commerce_Aquila_Tep_Online_Full-time_2022_2#readme",
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mongoose": "^6.2.9",
+    "nodemon": "^2.0.15"
+  }
+}
