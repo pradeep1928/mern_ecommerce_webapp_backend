@@ -16,14 +16,30 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+// Verify token for user or all
 const verifyTokenAndAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
     if (req.user.id === req.params.id || req.user.isAdmin) {
-      next()
+      next();
     } else {
       res.status(403).json("You are not allowed");
     }
   });
 };
 
-module.exports = { verifyToken, verifyTokenAndAuthorization };
+// Verify token for admin
+const verifyTokenAndAdmin = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.isAdmin) {
+      next();
+    } else {
+      res.status(403).json("You are not allowed");
+    }
+  });
+};
+
+module.exports = {
+  verifyToken,
+  verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+};
