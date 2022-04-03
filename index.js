@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 
 const userRoute = require("./routes/userRoute");
 const authRoute = require("./routes/authRoute");
+const productRoute = require("./routes/productRoute");
 
 
 // configuration
@@ -27,6 +28,7 @@ mongoose
   // Routes 
   app.use("/api/users", userRoute);
   app.use("/api/auth", authRoute);
+  app.use("/api/products", productRoute);
 
 // Listening to port
 const port = process.env.PORT || 5000;
