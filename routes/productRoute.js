@@ -8,105 +8,49 @@ const {
 const Product = require("../models/product");
 const { route } = require("./authRoute");
 
-
-// Create new Product 
+// Create new Product
 router.post("/", verifyTokenAndAdmin, async (req, res) => {
-    const newProduct = new Product(req.body);
+  const newProduct = new Product(req.body);
 
-    try {
-        const savedProduct = await newProduct.save();
-        res.status(200).json(savedProduct);
-    } catch (error) {
-        res.status(500).json(error);
+  try {
+    const savedProduct = await newProduct.save();
+    res.status(200).json(savedProduct);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+// Get Product by id
+router.get("/find/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+// // Get all Products
+router.get("/", async (req, res) => {
+  const qNew = req.query.new;
+  const qCategory = req.query.category;
+  try {
+    let products;
+    if (qNew) {
+      products = await Product.find().sort({ createdAt: -1 }).limit(1);
+    } else if (qCategory) {
+      products = await Product.find({
+        categories: {
+          $in: [qCategory],
+        },
+      });
+    } else {
+      products = await Product.find();
     }
-})
-
-
-
-
-
-// // Update user info after login
-// router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
-//   if (req.body.password) {
-//     req.body.password = CryptoJS.AES.encrypt(
-//       req.body.password,
-//       process.env.PASS_SEC
-//     ).toString();
-//   }
-
-//   try {
-//     const updateUser = await User.findByIdAndUpdate(
-//       req.params.id,
-//       {
-//         $set: req.body,
-//       },
-//       { new: true }
-//     );
-//     res.status(200).json(updateUser);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// });
-
-// // Delete user
-// router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
-//   try {
-//     await User.findByIdAndDelete(req.params.id);
-//     res.status(200).json("User has been deleted...");
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// });
-
-// // Get user by id using admin access
-// router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
-//   try {
-//     const user = await User.findByIdAndDelete(req.params.id);
-//     const { password, ...others } = user._doc;
-//     res.status(200).json(others);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// });
-
-// // Get all user using admin access
-// router.get("/", verifyTokenAndAdmin, async (req, res) => {
-//   try {
-//     // writting query to limit users
-//     const query = req.query.new;
-//     const users = query
-//       ? await User.find().sort({ _id: -1 }).limit(5)
-//       : await User.find();
-//     res.status(200).json(users);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// });
-
-// // Get user statistics (only for admin)
-// router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
-//   const date = new Date();
-//   const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
-
-//   try {
-//     const data = await User.aggregate([
-//       { $match: { createdAt: { $gte: lastYear } } },
-//       {
-//         $project: {
-//           month: { $month: "$createdAt" },
-//         },
-//       },
-//       {
-//         $group: {
-//           _id: "$month",
-//           total: { $sum: 1 },
-//         },
-//       },
-//     ]);
-//     res.status(200).json(data);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// });
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 
 module.exports = router;

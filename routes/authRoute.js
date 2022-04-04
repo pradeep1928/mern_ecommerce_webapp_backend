@@ -50,7 +50,7 @@ router.post("/login", async (req, res) => {
         isAdmin: user.isAdmin,
       },
       process.env.JWT_SEC,
-      { expiresIn: "3600s" }
+      { expiresIn: "2d" }
     );
     // destructuring password and other information of user
     // and sending only other information, and not password
